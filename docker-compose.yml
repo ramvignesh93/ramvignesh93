@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  db:
+    image: mongo:latest
+    container_name: mongodb_container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: backend_container
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_container
+    ports:
+      - "3000:3000"
+    stdin_open: true # Required for React dev server
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
